@@ -175,7 +175,12 @@ export async function POST(req: Request): Promise<Response> {
         if (isYouTube(cleanedUrl)) {
           // YouTube: captions via HTTP, sin descargar audio
           send({ status: 'transcribing', progress: 50 });
-          const result = await getYouTubeTranscript(cleanedUrl);
+          let result;
+          try {
+            result = await getYouTubeTranscript(cleanedUrl);
+          } catch {
+            throw new Error('YouTube bloquea las solicitudes desde servidores. Para videos de YouTube: descarga el video con cualquier descargador online y súbelo en la pestaña "Subir archivo".');
+          }
           send({ status: 'done', progress: 100, transcript: result.text, segments: result.segments });
         } else {
           // Facebook, Instagram, otros: descarga audio + Groq Whisper
