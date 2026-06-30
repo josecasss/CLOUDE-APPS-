@@ -50,11 +50,14 @@ async function downloadAudio(url: string): Promise<{ buffer: Buffer; ext: string
 
   // Sin ffmpeg: descarga el stream de audio nativo (m4a/webm/mp4)
   // Groq acepta: mp3, mp4, m4a, wav, webm, ogg, flac
-  await youtubeDl(url, {
-    format: 'worstaudio[ext=webm]/worstaudio[ext=m4a]/worstaudio',
+  // bestaudio/best cubre tanto YouTube (audio-only) como Facebook Reels (mp4 combinado)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (youtubeDl as any)(url, {
+    format: 'bestaudio[ext=m4a]/bestaudio[ext=webm]/bestaudio/best[ext=mp4]/best',
     output: outputTemplate,
     noCheckCertificates: true,
     noWarnings: true,
+    extractorArgs: 'youtube:player_client=tv_embedded',
   });
 
   const files = await readdir(TMP_DIR);
