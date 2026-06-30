@@ -92,7 +92,7 @@ async function transcribeWithGroq(buffer: Buffer, ext: string, groqKey: string):
   const fileName = `audio.${ext}`;
 
   const form = new FormData();
-  form.append('file', new Blob([buffer], { type: mimeType }), fileName);
+  form.append('file', new Blob([new Uint8Array(buffer)], { type: mimeType }), fileName);
   form.append('model', 'whisper-large-v3');
   form.append('response_format', 'verbose_json');
 
