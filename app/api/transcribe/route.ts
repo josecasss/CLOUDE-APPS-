@@ -55,7 +55,6 @@ async function downloadAudio(url: string): Promise<{ buffer: Buffer; ext: string
     output: outputTemplate,
     noCheckCertificates: true,
     noWarnings: true,
-    noCallHome: true,
   });
 
   const files = await readdir(TMP_DIR);
